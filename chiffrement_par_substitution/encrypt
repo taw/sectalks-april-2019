@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require "json"
+
+class MonoemojiEncrypt
+  def initialize(*args)
+    @input_file = Pathname(args[0])
+    @key_file = Pathname(args[1])
+    @output_file = Pathname(args[2])
+
+    # Keep \n
+    @input = @input_file.read.downcase.gsub(/(\p{Punct}| )+/, " ")
+    raise "Output already exists" if @output_file.exist?
+    raise "Key already exists" if @key_file.exist?
+  end
+
+  def emoji
+    @emoji ||= open("emoji.txt").readlines.map{|line| line[0]}
+  end
+
+  def input_chars
+    @input_chars ||= @input.chars.uniq
+  end
+
+  def key
+    @key ||= begin
+      raise "Not enough emoji" if input_chars.size > emoji.size
+      input_chars.zip(emoji.shuffle).to_h
+    end
+  end
+
+  def call
+    @output = @input.chars.map{|c| key.fetch(c)}.join
+    @output_file.write(@output)
+    @key_file.write(key.to_json)
+  end
+end
+
+unless ARGV.size == 3
+  STDERR.puts "Usage: #{$0} input.txt key.txt output.txt"
+  exit 1
+end
+
+MonoemojiEncrypt.new(*ARGV).call

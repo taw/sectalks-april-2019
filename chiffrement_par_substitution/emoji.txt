@@ -1,0 +1,100 @@
+🐵 Monkey Face
+🐒 Monkey
+🦍 Gorilla
+🐶 Dog Face
+🐕 Dog
+🐩 Poodle
+🐺 Wolf Face
+🦊 Fox Face
+🐱 Cat Face
+🐈 Cat
+🦁 Lion Face
+🐯 Tiger Face
+🐅 Tiger
+🐆 Leopard
+🐴 Horse Face
+🐎 Horse
+🦄 Unicorn Face
+🐮 Cow Face
+🐂 Ox
+🐃 Water Buffalo
+🐄 Cow
+🐷 Pig Face
+🐖 Pig
+🐗 Boar
+🐽 Pig Nose
+🐏 Ram
+🐑 Ewe
+🐐 Goat
+🐪 Camel
+🐫 Two-Hump Camel
+🐘 Elephant
+🦏 Rhinoceros
+🐭 Mouse Face
+🐁 Mouse
+🐀 Rat
+🐹 Hamster Face
+🐰 Rabbit Face
+🐇 Rabbit
+🐿 Chipmunk
+🦇 Bat
+🐻 Bear Face
+🐨 Koala
+🐼 Panda Face
+🦃 Turkey
+🐔 Chicken
+🐓 Rooster
+🐣 Hatching Chick
+🐤 Baby Chick
+🐥 Front-Facing Baby Chick
+🐦 Bird
+🐧 Penguin
+🕊 Dove
+🦅 Eagle
+🦆 Duck
+🦉 Owl
+🐸 Frog Face
+🐊 Crocodile
+🐢 Turtle
+🦎 Lizard
+🐍 Snake
+🐲 Dragon Face
+🐉 Dragon
+🐳 Spouting Whale
+🐋 Whale
+🐬 Dolphin
+🐟 Fish
+🐠 Tropical Fish
+🐡 Blowfish
+🦈 Shark
+🐙 Octopus
+🐚 Spiral Shell
+🦀 Crab
+🦐 Shrimp
+🦑 Squid
+🐌 Snail
+🦋 Butterfly
+🐛 Bug
+🐜 Ant
+🐝 Honeybee
+🐞 Lady Beetle
+🕷 Spider
+🍇 Grapes
+🍈 Melon
+🍉 Watermelon
+🍊 Tangerine
+🍋 Lemon
+🍌 Banana
+🍍 Pineapple
+🍎 Red Apple
+🍏 Green Apple
+🍐 Pear
+🍑 Peach
+🍒 Cherries
+🍓 Strawberry
+🥝 Kiwi Fruit
+🍅 Tomato
+🍗 Poultry Leg
+🌭 Hot Dog
+🌮 Taco
+🌯 Burrito

@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require "json"
+
+class MonoemojiDecrypt
+  def initialize(*args)
+    @input_file = Pathname(args[0])
+    @key_file = Pathname(args[1])
+    @output_file = Pathname(args[2])
+
+    @input = @input_file.read
+    @key = JSON.parse(@key_file.read).invert
+    raise "Output already exists" if @output_file.exist?
+  end
+
+  def call
+    @output = @input.chars.map{|c| @key.fetch(c)}.join
+    @output_file.write(@output)
+  end
+end
+
+
+unless ARGV.size == 3
+  STDERR.puts "Usage: #{$0} input.txt key.txt output.txt"
+  exit 1
+end
+
+MonoemojiDecrypt.new(*ARGV).call
