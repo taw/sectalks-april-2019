@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require "ctf-tools"
+require "openssl"
+
+bits = 1024
+p = OpenSSL::BN.generate_prime(bits).to_i
+q = OpenSSL::BN.generate_prime(bits).to_i
+n = p*q
+
+e = 0x10001
+d = RSA.derive_d(e: e, p: p, q: q)
+
+open("private_key.txt", "w") do |fh|
+  fh.puts "n=#{n}", "e=#{e}", "d=#{d}"
+end
+open("public_key.txt", "w") do |fh|
+  fh.puts "n=#{n}", "e=#{e}"
+end

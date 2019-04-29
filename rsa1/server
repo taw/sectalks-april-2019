@@ -1,0 +1,119 @@
+#!/usr/bin/env ruby
+
+require "socket"
+require "pathname"
+
+module RSA
+  class <<self
+    def encrypt(pt, e:, n:)
+      pt.powmod(e, n)
+    end
+
+    def decrypt(ct, d:, n:)
+      ct.powmod(d, n)
+    end
+  end
+end
+
+class Integer
+  def powmod(exponent, modulus)
+    return 0 if modulus == 1
+    if exponent < 0
+      # There are surely faster ways
+      return powmod(modulus-2, modulus).powmod(-exponent, modulus)
+    end
+    result = 1
+    base = self % modulus
+    while exponent > 0
+      result = result*base%modulus if exponent%2 == 1
+      exponent = exponent >> 1
+      base = base*base%modulus
+    end
+    result
+  end
+end
+
+class String
+  def to_i_binary
+    unpack("C*").reduce(0) do |a,b|
+      a*256 + b
+    end
+  end
+end
+
+def generate(msg)
+  n, e, d = Pathname("private_key.txt").read.scan(/\d+/).map(&:to_i)
+  v = msg.to_i_binary
+  RSA.decrypt(v, d: d, n: n)
+end
+
+def safe?(msg)
+  !(msg.include?("admin=yes"))
+end
+
+def verify(msg, signature)
+  n, e = Pathname("public_key.txt").read.scan(/\d+/).map(&:to_i)
+  v = msg.to_i_binary % n
+  RSA.encrypt(signature, e: e, n: n) == v
+end
+
+server = TCPServer.open(9001)
+loop do
+  Thread.fork(server.accept) do |client|
+    client.puts "Welcome to the cookie signature server"
+    client.puts "Commands available:"
+    client.puts "* get    - get key"
+    client.puts "* sign   - generate a signature"
+    client.puts "* verify - verify a signature"
+    client.puts "* admin  - log in as admin"
+
+    cmd = client.gets.chomp
+    case cmd
+    when "get"
+      client.puts Pathname("public_key.txt").read
+
+    when "verify"
+      client.puts "Enter message:"
+      msg = client.gets.chomp
+      client.puts "Enter signature:"
+      signature = Integer(client.gets.chomp)
+      if verify(msg, signature)
+        client.puts "Signature correct"
+      else
+        client.puts "Signature incorrect"
+      end
+
+    when "sign"
+      client.puts "Enter message:"
+      msg = client.gets.chomp
+      if safe?(msg)
+        signature = generate(msg)
+        client.puts "Signature: #{signature}"
+      else
+        client.puts "You can only sign safe messages"
+      end
+
+    when "admin"
+      client.puts "Enter message:"
+      msg = client.gets.chomp
+      client.puts "Enter signature:"
+      signature = Integer(client.gets.chomp)
+      if verify(msg, signature)
+        if safe?(msg)
+          client.puts "Message does not contain admin token"
+        else
+          client.puts "Successfully logged in as admin, here's the flag:"
+          client.puts Pathname("flag.txt").read
+        end
+      else
+        client.puts "Signature incorrect"
+      end
+
+    else
+      client.puts "Unrecognized command: #{cmd}"
+    end
+
+    client.puts "Goodbye!"
+    client.close
+  end
+end
