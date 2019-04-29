@@ -1,0 +1,23 @@
+GIT
+  remote: https://github.com/taw/ctf-tools
+  revision: cce454449c9fab27e3b55ca4999280c4de060722
+  specs:
+    ctf-tools (0.1.20180429)
+
+GEM
+  specs:
+    coderay (1.1.2)
+    method_source (0.9.2)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ctf-tools!
+  pry
+
+BUNDLED WITH
+   2.0.1
