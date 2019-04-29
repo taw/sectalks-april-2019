@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+unless ARGV.size == 3
+  STDERR.puts "Usage: #{$0} input key output"
+  exit 1
+end
+
+input_path = Pathname(ARGV[0])
+key_path = Pathname(ARGV[1])
+output_path = Pathname(ARGV[2])
+
+input = input_path.open("rb", &:read).bytes
+key = key_path.open("rb", &:read).chomp.bytes
+raise "Already exists: #{output_path}" if output_path.exist?
+output_path.open("wb") do |fh|
+  fh.write input.zip(key.cycle).map{|u,v| u^v}.pack("C*")
+end

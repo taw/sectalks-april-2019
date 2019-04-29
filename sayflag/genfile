@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+def sh(cmd)
+  puts cmd
+  system cmd
+end
+
+flag = ARGV[0] || raise
+
+sh %Q[say -o flag.aiff "#{flag}"]
+sh %Q[lame flag.aiff flag.mp3]
+sh %Q[./xor flag.mp3 key.txt flag.mp3.enc]
