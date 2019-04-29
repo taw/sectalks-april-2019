@@ -1,0 +1,161 @@
+#!/usr/bin/env ruby
+
+flag = ARGV[0] or raise "Flag please"
+
+legal_chars = [*"a".."z", "{", "}", "_"]
+
+raise if flag =~ /[^a-z_\{\}]/
+
+flag_css = ""
+
+flag.chars.each_with_index do |c, i|
+  flag_css << %Q[.opts:nth-child(#{2+i*2}) :nth-child(#{legal_chars.index(c)+1}) { pointer-events: auto; }\n]
+end
+
+css = <<EOF
+body {
+  display: relative;
+  text-align: center;
+  background-color: #88f;
+}
+* { margin: 0; padding; 0; }
+.maze {
+  position: relative;
+  margin: 20px;
+  height: #{flag.size * 50 + 110}px;
+  width: 900px;
+  background-color: blue;
+  z-index: 0;
+}
+.maze-contents {
+  position: absolute;
+  left: 40px;
+  top: 60px;
+  height: #{flag.size * 50 + 100}px;
+  width: 860px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+.entry {
+  background-color: lime;
+  z-index: 100;
+  position: absolute;
+  left: 420px;
+  top: 20px;
+  height: 40px;
+  width: 60px;
+  line-height: 40px;
+  cursor: pointer;
+  z-index: 200;
+}
+
+.line {
+  background-color: #484;
+  pointer-events: auto;
+}
+.opts {
+  justify-content: space-between;
+}
+.opt {
+  background-color: green;
+}
+
+.line {
+  height: 20px;
+}
+.opts {
+  height: 30px;
+  display: flex;
+  pointer-events: none;
+}
+.opt {
+  height: 30px;
+  width: 25px;
+  line-height: 30px;
+  font-size: 24px;
+  pointer-events: none;
+  transition: 2s;
+}
+.opt:hover {
+  background-color: lime;
+}
+#{flag_css}
+.finish {
+  background-color: lime;
+  position: absolute;
+  left: 420px;
+  top: #{flag.size * 50 + 80}px;
+  height: 40px;
+  width: 60px;
+  line-height: 40px;
+}
+
+.lost { display: none; }
+.victory { display: none; }
+
+.finish:hover ~  .victory, .victory:hover {
+  position: absolute;
+  top: 0;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  line-height: 100vh;
+  font-size: 100px;
+  color: purple;
+  z-index: 120;
+  background-color: rgba(0,255,0,0.4);
+}
+
+.maze:hover ~ .lost, .lost:hover {
+  position: absolute;
+  top: 0;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  line-height: 100vh;
+  font-size: 100px;
+  color: red;
+  z-index: 100;
+  background-color: rgba(255,0,0,0.4);
+}
+EOF
+
+maze = ""
+flag.size.times do |c|
+  maze << %Q[<div class="line"></div>\n]
+  maze << %Q[<div class="opts">\n]
+  legal_chars.each do |c|
+    maze << %Q[<div class="opt">#{c}</div>\n]
+  end
+  maze << %Q[</div>\n]
+end
+
+html = <<EOF
+<!DOCTYPE html>
+<html>
+<head>
+<title>Password Validator Maze</title>
+<style>
+#{css}
+</style>
+</head>
+<body>
+<div class="maze"></div>
+<div class="entry">START</div>
+<div class="maze-contents">
+#{maze}
+<div class="line"></div>
+</div>
+<div class="finish">END</div>
+<div class="lost">Flag incorrect</div>
+<div class="victory">Flag correct</div>
+</body>
+</html>
+EOF
+
+open("chal.html", "w") do |fh|
+  fh.puts html
+end
