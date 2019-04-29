@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+flag = ARGV[0] or raise
+
+checks = []
+
+flag.chars.each_with_index do |c, i|
+  checks << %Q[  if chars[#{i}] != '#{c}' { return false; }\n]
+end
+
+code = <<EOF
+use std::env;
+
+fn validate(flag : String) -> bool {
+  let chars : Vec<char> = flag.chars().collect();
+
+  if chars.len() != #{flag.size} {
+    return false;
+  }
+#{checks.shuffle.join}
+  return true;
+}
+
+fn main() {
+  let args : Vec<String> = env::args().collect();
+
+  if args.len() != 2 {
+    println!("Please provide flag to check")
+  } else {
+    let ref flag = &args[1];
+    if validate(flag.to_string()) {
+      println!("Flag is valid")
+    } else {
+      println!("Flag is invalid")
+    }
+  }
+}
+EOF
+
+open("validate.rs", "w") do |fh|
+  fh.puts code
+end

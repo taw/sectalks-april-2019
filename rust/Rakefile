@@ -1,0 +1,7 @@
+# To generate:
+# $ ./gen_code 'flag{word_word_word}'
+# $ rake
+
+task "default" do
+  sh "rustc validate.rs"
+end
