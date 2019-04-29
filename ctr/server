@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+require "openssl"
+require "socket"
+require "pathname"
+
+def encrypt(msg)
+  crypt = OpenSSL::Cipher.new("AES-128-CTR")
+  crypt.encrypt
+  crypt.key = @key
+  crypt.iv = @iv
+  crypt.padding = 0
+  ct = crypt.update(msg) + crypt.final
+  ct.bytes.map{|u| "%02x" % u}.join
+end
+
+@flag = Pathname("flag.txt").read.chomp
+@key = Random::DEFAULT.bytes(16)
+@iv = Random::DEFAULT.bytes(16)
+
+server = TCPServer.open(9000)
+loop do
+  Thread.fork(server.accept) do |client|
+    client.puts "Welcome to the encryption server"
+    client.puts "Commands available:"
+    client.puts "* flag    - encrypt flag"
+    client.puts "* encrypt - encrypt message"
+
+    cmd = client.gets.chomp
+    case cmd
+    when "flag"
+      client.puts "Encrypted: #{ encrypt(@flag) }"
+
+    when "encrypt"
+      msg = client.gets.chomp
+      client.puts "Encrypted: #{ encrypt(msg) }"
+
+    else
+      client.puts "Unrecognized command: #{cmd}"
+    end
+
+    client.puts "Goodbye!"
+    client.close
+  end
+end
