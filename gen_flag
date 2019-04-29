@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require "pry"
+
+words = Pathname("/usr/share/dict/words")
+  .readlines
+  .map(&:chomp)
+  .grep_v(/[A-Z]/)
+  .select{|w| w.size >= 4}
+
+10.times do
+  puts "flag{#{ words.sample(3).join("_") }}"
+end
