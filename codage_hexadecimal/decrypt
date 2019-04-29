@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+plain = [*"0".."9", *"a".."f"].join
+
+unless ARGV.size == 2
+  STDERR.puts "Usage: #{$0} key.txt input.txt"
+  exit 1
+end
+
+key = open(ARGV[0], &:read).chomp
+input = open(ARGV[1], &:read)
+
+puts input.tr(key, plain).scan(/../).map{|u| u.to_i(16)}.pack("C*")
