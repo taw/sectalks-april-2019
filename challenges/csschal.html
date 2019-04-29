@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Password Validator Maze</title>
+<style>
+body {
+  display: relative;
+  text-align: center;
+  background-color: #88f;
+}
+* { margin: 0; padding; 0; }
+.maze {
+  position: relative;
+  margin: 20px;
+  height: 1560px;
+  width: 900px;
+  background-color: blue;
+  z-index: 0;
+}
+.maze-contents {
+  position: absolute;
+  left: 40px;
+  top: 60px;
+  height: 1550px;
+  width: 860px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+.entry {
+  background-color: lime;
+  z-index: 100;
+  position: absolute;
+  left: 420px;
+  top: 20px;
+  height: 40px;
+  width: 60px;
+  line-height: 40px;
+  cursor: pointer;
+  z-index: 200;
+}
+
+.line {
+  background-color: #484;
+  pointer-events: auto;
+}
+.opts {
+  justify-content: space-between;
+}
+.opt {
+  background-color: green;
+}
+
+.line {
+  height: 20px;
+}
+.opts {
+  height: 30px;
+  display: flex;
+  pointer-events: none;
+}
+.opt {
+  height: 30px;
+  width: 25px;
+  line-height: 30px;
+  font-size: 24px;
+  pointer-events: none;
+  transition: 2s;
+}
+.opt:hover {
+  background-color: lime;
+}
+.opts:nth-child(2) :nth-child(6) { pointer-events: auto; }
+.opts:nth-child(4) :nth-child(12) { pointer-events: auto; }
+.opts:nth-child(6) :nth-child(1) { pointer-events: auto; }
+.opts:nth-child(8) :nth-child(7) { pointer-events: auto; }
+.opts:nth-child(10) :nth-child(27) { pointer-events: auto; }
+.opts:nth-child(12) :nth-child(1) { pointer-events: auto; }
+.opts:nth-child(14) :nth-child(19) { pointer-events: auto; }
+.opts:nth-child(16) :nth-child(8) { pointer-events: auto; }
+.opts:nth-child(18) :nth-child(5) { pointer-events: auto; }
+.opts:nth-child(20) :nth-child(14) { pointer-events: auto; }
+.opts:nth-child(22) :nth-child(29) { pointer-events: auto; }
+.opts:nth-child(24) :nth-child(3) { pointer-events: auto; }
+.opts:nth-child(26) :nth-child(1) { pointer-events: auto; }
+.opts:nth-child(28) :nth-child(20) { pointer-events: auto; }
+.opts:nth-child(30) :nth-child(20) { pointer-events: auto; }
+.opts:nth-child(32) :nth-child(9) { pointer-events: auto; }
+.opts:nth-child(34) :nth-child(12) { pointer-events: auto; }
+.opts:nth-child(36) :nth-child(25) { pointer-events: auto; }
+.opts:nth-child(38) :nth-child(29) { pointer-events: auto; }
+.opts:nth-child(40) :nth-child(19) { pointer-events: auto; }
+.opts:nth-child(42) :nth-child(21) { pointer-events: auto; }
+.opts:nth-child(44) :nth-child(2) { pointer-events: auto; }
+.opts:nth-child(46) :nth-child(16) { pointer-events: auto; }
+.opts:nth-child(48) :nth-child(15) { pointer-events: auto; }
+.opts:nth-child(50) :nth-child(5) { pointer-events: auto; }
+.opts:nth-child(52) :nth-child(14) { pointer-events: auto; }
+.opts:nth-child(54) :nth-child(1) { pointer-events: auto; }
+.opts:nth-child(56) :nth-child(12) { pointer-events: auto; }
+.opts:nth-child(58) :nth-child(28) { pointer-events: auto; }
+
+.finish {
+  background-color: lime;
+  position: absolute;
+  left: 420px;
+  top: 1530px;
+  height: 40px;
+  width: 60px;
+  line-height: 40px;
+}
+
+.lost { display: none; }
+.victory { display: none; }
+
+.finish:hover ~  .victory, .victory:hover {
+  position: absolute;
+  top: 0;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  line-height: 100vh;
+  font-size: 100px;
+  color: purple;
+  z-index: 120;
+  background-color: rgba(0,255,0,0.4);
+}
+
+.maze:hover ~ .lost, .lost:hover {
+  position: absolute;
+  top: 0;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  line-height: 100vh;
+  font-size: 100px;
+  color: red;
+  z-index: 100;
+  background-color: rgba(255,0,0,0.4);
+}
+
+</style>
+</head>
+<body>
+<div class="maze"></div>
+<div class="entry">START</div>
+<div class="maze-contents">
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+<div class="line"></div>
+<div class="opts">
+<div class="opt">a</div>
+<div class="opt">b</div>
+<div class="opt">c</div>
+<div class="opt">d</div>
+<div class="opt">e</div>
+<div class="opt">f</div>
+<div class="opt">g</div>
+<div class="opt">h</div>
+<div class="opt">i</div>
+<div class="opt">j</div>
+<div class="opt">k</div>
+<div class="opt">l</div>
+<div class="opt">m</div>
+<div class="opt">n</div>
+<div class="opt">o</div>
+<div class="opt">p</div>
+<div class="opt">q</div>
+<div class="opt">r</div>
+<div class="opt">s</div>
+<div class="opt">t</div>
+<div class="opt">u</div>
+<div class="opt">v</div>
+<div class="opt">w</div>
+<div class="opt">x</div>
+<div class="opt">y</div>
+<div class="opt">z</div>
+<div class="opt">{</div>
+<div class="opt">}</div>
+<div class="opt">_</div>
+</div>
+
+<div class="line"></div>
+</div>
+<div class="finish">END</div>
+<div class="lost">Flag incorrect</div>
+<div class="victory">Flag correct</div>
+</body>
+</html>
