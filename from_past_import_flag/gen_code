@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+flag = ARGV[0] || raise
+
+raise unless flag.size <= 128
+
+arys = []
+
+15.times do
+  arys << 128.times.map{ rand(256) }
+end
+
+final = flag.bytes
+final += [0] * (128 - final.size)
+128.times do |i|
+  final[i] ^= arys.map{|a| a[i]}.inject{|u,v| u^v}
+end
+arys << final
+
+code = %Q[
+char tables[16*128] = {
+  #{arys.flatten.join(", ")}
+};
+]
+
+open("tables.c", "w") do |fh|
+  fh.puts code
+end

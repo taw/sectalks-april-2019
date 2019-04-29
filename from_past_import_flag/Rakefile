@@ -1,0 +1,7 @@
+# To generate:
+# $ ./gen_code 'flag{word_word_word}'
+# $ rake
+
+task "default" do
+  sh "gcc -std=c99 -O3 ntp_client.c tables.c from_past_import_flag.c -o from_past_import_flag"
+end
